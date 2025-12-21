@@ -30,17 +30,17 @@ class MyApp(QMainWindow):
             self.show_message(QMessageBox.Warning, "Vui lòng nhập khóa là số và không được để trống!")
             return
 
-        url = "http://127.0.0.1:5000/api/caesar/encrypt"
+        url = "http://127.0.0.1:5001/api/caesar/encrypt"
         payload = {
             "plain_text": self.ui.txt_plain_text.toPlainText(),
             "key": key
         }
 
         try:
-            response = requests.post(url, json=payload)
+            response = requests.post(url, json=payload, timeout=5)
             if response.status_code == 200:
                 data = response.json()
-                self.ui.txt_cipher_text.setPlainText(data["encrypted_message"])
+                self.ui.txt_cipher_text.setPlainText(data.get("encrypted_message") or data.get("result") or data.get("ciphertext") or "")
                 self.show_message(QMessageBox.Information, "Mã hóa thành công!")
             else:
                 self.show_message(QMessageBox.Warning, "Lỗi khi gọi API!")
@@ -53,17 +53,17 @@ class MyApp(QMainWindow):
             self.show_message(QMessageBox.Warning, "Vui lòng nhập khóa là số và không được để trống!")
             return
 
-        url = "http://127.0.0.1:5000/api/caesar/decrypt"
+        url = "http://127.0.0.1:5001/api/caesar/decrypt"
         payload = {
             "cipher_text": self.ui.txt_cipher_text.toPlainText(),
             "key": key
         }
 
         try:
-            response = requests.post(url, json=payload)
+            response = requests.post(url, json=payload, timeout=5)
             if response.status_code == 200:
                 data = response.json()
-                self.ui.txt_plain_text.setPlainText(data["decrypted_message"])
+                self.ui.txt_plain_text.setPlainText(data.get("decrypted_message") or data.get("result") or data.get("plain_text") or "")
                 self.show_message(QMessageBox.Information, "Giải mã thành công!")
             else:
                 self.show_message(QMessageBox.Warning, "Lỗi khi gọi API!")

@@ -15,7 +15,7 @@ class MyApp(QMainWindow):
         self.ui.btn_verify.clicked.connect(self.call_api_verify)
 
     def call_api_gen_keys(self):
-        url = "http://127.0.0.1:5000/api/rsa/generate_keys"
+        url = "http://127.0.0.1:5001/api/rsa/generate_keys"
         try:
             response = requests.get(url)
             if response.status_code == 200:
@@ -28,7 +28,7 @@ class MyApp(QMainWindow):
             print("Error:", e)
 
     def call_api_encrypt(self):
-        url = "http://127.0.0.1:5000/api/rsa/encrypt"
+        url = "http://127.0.0.1:5001/api/rsa/encrypt"
         payload = {
             "message": self.ui.txt_plain_text.toPlainText(),
             "key_type": "public"
@@ -46,7 +46,7 @@ class MyApp(QMainWindow):
             print("Error:", e)
 
     def call_api_decrypt(self):
-        url = "http://127.0.0.1:5000/api/rsa/decrypt"
+        url = "http://127.0.0.1:5001/api/rsa/decrypt"
         payload = {
             "ciphertext": self.ui.txt_cipher_text.toPlainText(),
             "key_type": "private"
@@ -64,7 +64,7 @@ class MyApp(QMainWindow):
             print("Error:", e)
 
     def call_api_sign(self):
-        url = "http://127.0.0.1:5000/api/rsa/sign"
+        url = "http://127.0.0.1:5001/api/rsa/sign"
         payload = {
             "message": self.ui.txt_info.toPlainText()
         }
@@ -81,7 +81,7 @@ class MyApp(QMainWindow):
             print("Error:", e)
 
     def call_api_verify(self):
-        url = "http://127.0.0.1:5000/api/rsa/verify"
+        url = "http://127.0.0.1:5001/api/rsa/verify"
         payload = {
             "message": self.ui.txt_info.toPlainText(),
             "signature": self.ui.txt_sign.toPlainText()

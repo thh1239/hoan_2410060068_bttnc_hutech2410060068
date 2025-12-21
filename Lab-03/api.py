@@ -7,6 +7,54 @@ app = Flask(__name__)
 rsa_cipher = RSACipher()
 ecc_cipher = ECCCipher()
 
+# --------------------
+# Caesar Cipher API
+# --------------------
+
+def _caesar_transform(text: str, key: int, decrypt: bool = False) -> str:
+    """Shift letters by key (supports A-Z / a-z). Non-letters are kept."""
+    key = int(key) % 26
+    if decrypt:
+        key = (-key) % 26
+
+    out = []
+    for ch in text:
+        o = ord(ch)
+        if 65 <= o <= 90:  # A-Z
+            out.append(chr((o - 65 + key) % 26 + 65))
+        elif 97 <= o <= 122:  # a-z
+            out.append(chr((o - 97 + key) % 26 + 97))
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
+@app.route('/api/caesar/encrypt', methods=['POST'])
+def caesar_encrypt():
+    data = request.json or {}
+    plain_text = data.get('plain_text', '')
+    key = data.get('key', None)
+
+    if key is None or str(key).strip() == '':
+        return jsonify({'error': 'Missing key'}), 400
+
+    encrypted = _caesar_transform(plain_text, key, decrypt=False)
+    return jsonify({'encrypted_message': encrypted})
+
+
+@app.route('/api/caesar/decrypt', methods=['POST'])
+def caesar_decrypt():
+    data = request.json or {}
+    cipher_text = data.get('cipher_text', '')
+    key = data.get('key', None)
+
+    if key is None or str(key).strip() == '':
+        return jsonify({'error': 'Missing key'}), 400
+
+    decrypted = _caesar_transform(cipher_text, key, decrypt=True)
+    return jsonify({'decrypted_message': decrypted})
+
+
 @app.route('/api/rsa/generate_keys', methods=['GET'])
 def rsa_generate_keys():
     rsa_cipher.generate_keys()
@@ -97,4 +145,4 @@ def ecc_verify_signature():
     return jsonify({'is_verified': is_verified})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)

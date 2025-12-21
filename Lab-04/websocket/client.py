@@ -24,7 +24,7 @@ class WebSocketClient:
 
     def maybe_retry_connection(self, future) -> None:
         try:
-            self.connection = future.result()
+            self.connection = future.encrypted_message()
         except:
             print("Không thể kết nối lại, sẽ thử lại sau 3 giây...")
             self.io_loop.call_later(3, self.connect_and_read)

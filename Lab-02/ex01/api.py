@@ -8,16 +8,16 @@ caesar_cipher = CaesarCipher()
 playfair_cipher = PlayFairCipher()
 
 
-@app.route("/api/caesar/encrypt", methods=["POST"])
+@app.route("/api/rsa/encrypt", methods=["POST"])
 def caesar_encrypt():
     data = request.json
     plain_text = data["plain_text"]
     key = int(data["key"])
     encrypted_text = caesar_cipher.encrypt_text(plain_text, key)
-    return jsonify({"encrypted_message": encrypted_text})
+    return jsonify({"resultd_text})
 
 
-@app.route("/api/caesar/decrypt", methods=["POST"])
+@app.route("/api/rsa/decrypt", methods=["POST"])
 def caesar_decrypt():
     data = request.json
     cipher_text = data["cipher_text"]
@@ -55,4 +55,4 @@ def playfair_decrypt():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)
